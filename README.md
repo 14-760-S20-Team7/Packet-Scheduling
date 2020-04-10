@@ -47,9 +47,9 @@ Solution: Perform experiments on smaller machines.
 
 ## Next Step
 
-To measure the overhead benefit of Eiffel packet scheduler, the kernel use case in paper just sends a large number of the same TCP flows. However, this evaluation only considers the time-based priority, but fails to consider wider rankings like different Quality of Service(QoS) rankings of packets. In the next step, we will improve the completeness of kernel use cases by self-defined packets priority, and packaging this as a Linux command line tool serving as a self-defined INPUT/OUTPUT packet ranking tool.
+To measure the overhead benefit of Eiffel packet scheduler, the kernel use case in paper just sends a large number of the same TCP flows. However, this evaluation only considers the time-based priority, but fails to consider wider rankings like different Quality of Service(QoS) rankings of packets. **In the next step, we will improve the completeness of kernel use cases by self-defined packets priority, and packaging this as a Linux command line tool serving as a self-defined INPUT/OUTPUT packet ranking tool.**
 
-The packet carries six bits of Differentiated Service Codepoint(DSCP) in its IP, which can denote 64 kinds of importance or priority. The top 3 bits of DSCP defines Class Selector Codepoints(CS), mapping to IP priority level 0-7. For example, for Assured Forwarding(AF), the top 4th and 5th bits define the drop possibility level. 01-Low Drop; 10-Medium Drop, 11-High Drop. 
+The packet carries six bits of Differentiated Service Codepoint(DSCP) in its IP, which can denote 64 kinds of importance or priority. The top 3 bits of DSCP defines Class Selector Codepoints(CS), mapping to IP priority level 0-7. For example, for Assured Forwarding(AF), the top 4th and 5th bits define the drop possibility level (01-Low Drop; 10-Medium Drop; 11-High Drop). 
 
 We plan to modify the DSCP to generate different QoS packets through changing the iptables. More specifically, using command `sudo iptables -t mangle -A <OUTPUT/INPUT> -p tcp -s  <src ip> -d <dst ip> -j DSCP --set-dscp <dscp value>` to add rules, which set DSCP rules in the INPUT Chain and OUTPUT Chain in iptables.
 
