@@ -35,7 +35,7 @@ We perform the experiments on m4.xlarge, m4.2xlarge and m4.4xlarge on AWS. And h
 ## Issues
 We have met a lot of problems during the deployment of Eiffel, here is the problems and our solutions:
 - **Fail to compile the Linux kernel**  
-We recompiled Kernel 4.10 in github branch but encountered an error: undefined reference to` ____ilog2_NaN`. We figuered out that there were some problems in source code of old kernel version.  
+We recompiled Kernel 4.10 in github branch but encountered an error: undefined reference to `____ilog2_NaN`. Later, we figured out that there were some problems in source code of old kernel version.  
 Solution: apply patch to the kernel.
 
 - **Fail to deploy the custom queue as qdisc (Eiffel)**  
