@@ -35,6 +35,7 @@ We perform the experiments on m4.xlarge, m4.2xlarge and m4.4xlarge on AWS. And h
 ## Issues
 We have met a lot of problems during the deployment of Eiffel, here is the problems and our solutions:
 - **Fail to compile the Linux kernel**  
+We recompiled Kernel 4.10 in github branch but encountered an error: undefined reference to` ____ilog2_NaN`. We figuered out that there were some problems in source code of old kernel version.  
 Solution: apply patch to the kernel.
 
 - **Fail to deploy the custom queue as qdisc (Eiffel)**  
@@ -42,14 +43,14 @@ We followed the author’s instruction and tried to deploy the Eiffel queue as q
 Solution: Use `tc qdisc add dev ens3 root fq` to deploy instead.
 
 - **Fail to compile the Linux kernel on m4.16xlarge**  
-We created an image of the provided Linux kernel on m4.large, and fail to use this image on m4.16xlarge. We also tried to compile this image on m4.16xlarge directly, but still fail after we reboot the machine. We suspect that the different version of linux may casue this error. 
+We created an image of the provided Linux kernel on m4.large, and fail to use this image on m4.16xlarge. We also tried to compile this image on m4.16xlarge directly, but still fail after we reboot the machine. We suspect that the different version of linux may casue this error.  
 Solution: Perform experiments on smaller machines.
 
 ## Next Step
 
-To measure the overhead benefit of Eiffel packet scheduler, the kernel use case in paper just sends a large number of the same TCP flows. However, this evaluation only considers the time-based priority, but fails to consider wider rankings like different Quality of Service(QoS) rankings of packets. **In the next step, we will improve the completeness of kernel use cases by self-defined packets priority, and packaging this as a Linux command line tool serving as a self-defined INPUT/OUTPUT packet ranking tool.**
+To measure the overhead benefit of Eiffel packet scheduler, the kernel use case in paper sends a large number of the same TCP flows. However, this evaluation only considers the time-based priority, but fails to consider wider rankings like different Quality of Service(QoS) rankings of packets. **In the next step, we will improve the completeness of kernel use case by self-defined packets priority, and packaging this as a Linux command line tool serving as a self-defined INPUT/OUTPUT packet ranking tool.**
 
-The packet carries six bits of Differentiated Service Codepoint(DSCP) in its IP, which can denote 64 kinds of importance or priority. The top 3 bits of DSCP defines Class Selector Codepoints(CS), mapping to IP priority level 0-7. For example, for Assured Forwarding(AF), the top 4th and 5th bits define the drop possibility level (01-Low Drop; 10-Medium Drop; 11-High Drop). 
+The packet carries six bits of Differentiated Service Codepoint(DSCP) in its IP, which can denote 64 kinds of importance or priority. The top 3 bits of DSCP defines Class Selector Codepoints(CS), mapping to IP priority level 0-7. For example, for Assured Forwarding(AF), the 4th and 5th bits define the drop possibility level(01-Low Drop; 10-Medium Drop; 11-High Drop). 
 
 We plan to modify the DSCP to generate different QoS packets through changing the iptables. More specifically, using command `sudo iptables -t mangle -A <OUTPUT/INPUT> -p tcp -s  <src ip> -d <dst ip> -j DSCP --set-dscp <dscp value>` to add rules, which set DSCP rules in the INPUT Chain and OUTPUT Chain in iptables.
 
