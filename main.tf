@@ -47,7 +47,6 @@ resource "aws_instance" "my_server1" {
     Name = "server1"
   }
 
-  # you need to specify a SSH key that exists in your AWS account
   key_name = var.key_name
 }
 
@@ -60,7 +59,6 @@ resource "aws_instance" "my_server2" {
     Name = "server2"
   }
 
-  # you need to specify a SSH key that exists in your AWS account
   key_name = var.key_name
 }
 
