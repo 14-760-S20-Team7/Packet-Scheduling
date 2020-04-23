@@ -1,4 +1,7 @@
 # Use terraform to provision EC2 instance
+# We'll provision 2 client instances and 1 server instance.
+#
+# Steps:
 # 1. Install terraform: https://learn.hashicorp.com/terraform/getting-started/install.html
 # 2. export AWS_ACCESS_KEY_ID=(your access key id)
 #    export AWS_SECRET_ACCESS_KEY=(your secret access key)
@@ -8,6 +11,7 @@
 #       terraform apply
 # 5. To terminate these resources, Run: 
 #       terraform destroy
+#
 
 provider "aws" {
   region = "us-east-1"
@@ -38,37 +42,37 @@ resource "aws_security_group" "instance" {
   }
 }
 
-resource "aws_instance" "my_server1" {
-  ami           = "ami-0a6a8f40c0082d6eb"
-  instance_type = "m4.xlarge"
+resource "aws_instance" "my_client1" {
+  ami           = var.ami
+  instance_type = var.instance_type
   vpc_security_group_ids = [aws_security_group.instance.id]
 
   tags = {
-    Name = "server1"
+    Name = "client1"
   }
 
   key_name = var.key_name
 }
 
-resource "aws_instance" "my_server2" {
-  ami           = "ami-0a6a8f40c0082d6eb"
-  instance_type = "m4.xlarge"
+resource "aws_instance" "my_client2" {
+  ami           = var.ami
+  instance_type = var.instance_type
   vpc_security_group_ids = [aws_security_group.instance.id]
 
   tags = {
-    Name = "server2"
+    Name = "client2"
   }
 
   key_name = var.key_name
 }
 
-resource "aws_instance" "my_client" {
-  ami           = "ami-0a6a8f40c0082d6eb"
-  instance_type = "m4.xlarge"
+resource "aws_instance" "my_server" {
+  ami           = var.ami
+  instance_type = var.instance_type
   vpc_security_group_ids = [aws_security_group.instance.id]
 
   tags = {
-    Name = "client"
+    Name = "server"
   }
 
   key_name = var.key_name
